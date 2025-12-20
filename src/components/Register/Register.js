@@ -1,12 +1,39 @@
 import "./Register.scss";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 
 const Register = (props) => {
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+
   let history = useHistory();
 
   const handleLogin = () => {
     history.push("/login");
   };
+
+  // useEffect(() => {
+  //   axios.get("http://localhost:8080/api/test-api").then(data => {
+  //     console.log("check data....", data)
+  //   })
+  // }, [])
+
+  const handleRegister = () => {
+    // let userData = {email, phone, username, password}
+    let userData = {
+      email: email,
+      phone: phone,
+      username: username,
+      password: password
+    }
+    console.log(">>>check user data: ", userData)
+  }
   return (
     <div className="login-container mt-3">
       <div className="container">
@@ -27,6 +54,8 @@ const Register = (props) => {
                 type="text"
                 className="form-control"
                 placeholder="Email address"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
               />
             </div>
 
@@ -36,6 +65,8 @@ const Register = (props) => {
                 type="text"
                 className="form-control"
                 placeholder="Phone number"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
               />
             </div>
 
@@ -45,6 +76,8 @@ const Register = (props) => {
                 type="text"
                 className="form-control"
                 placeholder="Username"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
               />
             </div>
 
@@ -54,6 +87,8 @@ const Register = (props) => {
                 type="password"
                 className="form-control"
                 placeholder="Password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
               />
             </div>
 
@@ -63,9 +98,11 @@ const Register = (props) => {
                 type="password"
                 className="form-control"
                 placeholder="Re-enter password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
               />
             </div>
-            <button className="btn-primary">Register</button>
+            <button className="btn-primary" onClick={() => handleRegister()}>Register</button>
             <hr />
             <div className="text-center">
               <button
