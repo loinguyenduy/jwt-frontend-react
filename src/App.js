@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Register from "./components/Register/Register";
+import { ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -19,7 +21,7 @@ function App() {
             <Login />
           </Route>
           <Route path="/register">
-          <Register/>
+            <Register />
           </Route>
           <Route path="/" exact>
             Home
@@ -27,6 +29,20 @@ function App() {
           <Route path="*">404 Not found</Route>
         </Switch>
       </div>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </Router>
   );
 }

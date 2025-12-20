@@ -2,15 +2,14 @@ import "./Register.scss";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { ToastContainer, toast } from "react-toastify";
 
 const Register = (props) => {
-  const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   let history = useHistory();
 
@@ -24,16 +23,45 @@ const Register = (props) => {
   //   })
   // }, [])
 
+  const isValidInput = () => {
+    if (!email) {
+      toast.error("Email is required!");
+      return false;
+    }
+    if (!phone) {
+      toast.error("Phone is required!");
+      return false;
+    }
+
+    if (!password) {
+      toast.error("Password is required!");
+      return false;
+    }
+
+    if (password != confirmPassword) {
+      toast.error("Your password does not match!");
+      return false;
+    }
+
+    let regx = /\S+@\S+\.\S+/;
+    if(!regx.test(email)){
+      toast.error("Please enter a valid email address.")
+      return false                    
+    }
+    return true
+  };
+
   const handleRegister = () => {
+    let check = isValidInput();
     // let userData = {email, phone, username, password}
     let userData = {
       email: email,
       phone: phone,
       username: username,
-      password: password
-    }
-    console.log(">>>check user data: ", userData)
-  }
+      password: password,
+    };
+    console.log(">>>check user data: ", userData);
+  };
   return (
     <div className="login-container mt-3">
       <div className="container">
@@ -70,7 +98,7 @@ const Register = (props) => {
               />
             </div>
 
-              <div className="form-group">
+            <div className="form-group">
               <label>Username</label>
               <input
                 type="text"
@@ -102,13 +130,12 @@ const Register = (props) => {
                 onChange={(event) => setConfirmPassword(event.target.value)}
               />
             </div>
-            <button className="btn-primary" onClick={() => handleRegister()}>Register</button>
+            <button className="btn-primary" onClick={() => handleRegister()}>
+              Register
+            </button>
             <hr />
             <div className="text-center">
-              <button
-                className="btn btn-success"
-                onClick={() => handleLogin()}
-              >
+              <button className="btn btn-success" onClick={() => handleLogin()}>
                 Already've an account. Login
               </button>
             </div>
