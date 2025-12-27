@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Login.scss";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -44,6 +44,7 @@ const Login = (props) => {
       }
       sessionStorage.setItem('account', JSON.stringify(data))
       history.push('/users')
+      window.location.reload()
     }
 
     if (response.data && +response.data.EC != 0) {
@@ -52,6 +53,19 @@ const Login = (props) => {
     }
     console.log(">>>> check response: ", response.data);
   };
+
+  const handlePressEnter = (event) => {
+    if(event.charCode === 13 && event.code === 'Enter'){
+      handleLogin();
+    }
+  }
+
+  useEffect(() => {
+    let session = sessionStorage.getItem("account");
+    if (session) {
+      history.push("/");
+    }
+  }, []);
   return (
     <div className="login-container mt-3">
       <div className="container">
@@ -90,6 +104,7 @@ const Login = (props) => {
               onChange={(event) => {
                 setPassword(event.target.value);
               }}
+              onKeyPress={(event) => handlePressEnter(event)}
             />
             <button className="btn-primary" onClick={() => handleLogin()}>
               Login

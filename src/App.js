@@ -1,15 +1,13 @@
 import "./App.scss";
 import "./components/Navigation/Nav.scss";
 import Nav from "./components/Navigation/Nav";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Login from "./components/Login/Login";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Register from "./components/Register/Register";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Users from "./components/ManageUsers/Users";
 import { useEffect, useState } from "react";
-import _ from "lodash";
+import AppRoutes from "./components/routes/AppRoutes";
+import { BrowserRouter as Router } from "react-router-dom";
+
 
 function App() {
   const [account, setAccount] = useState({});
@@ -20,28 +18,14 @@ function App() {
       setAccount(JSON.parse(session));
     }
   }, []);
+
   return (
     <Router>
+      <div className="app-header">
+        <Nav />
+      </div>
       <div className="app-container">
-        {account && !_.isEmpty(account) && account.isAuthenticated && <Nav />}
-        <Switch>
-          <Route path="/news">news</Route>
-          <Route path="/about">about</Route>
-          <Route path="/contact">contact</Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/" exact>
-            Home
-          </Route>
-          <Route path="*">404 Not found</Route>
-        </Switch>
+        <AppRoutes />
       </div>
 
       <ToastContainer
