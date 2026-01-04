@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react";
 import "./Users.scss";
 import { fetchAllUser } from "../../services/userService";
+import ReactPaginate from "react-paginate";
 
 const Users = (props) => {
   const [listUsers, setListUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(3);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [currentPage]);
 
   const fetchUsers = async () => {
-    let res = await fetchAllUser();
+    let res = await fetchAllUser(currentPage, currentLimit);
 
-    if(res && res.data && res.data.EC === 0){
-      setListUsers(res.data.DT)
-      console.log(res.data.DT)
+    if (res && res.data && res.data.EC === 0) {
+      setTotalPages(res.data.DT.totalPages);
+      setListUsers(res.data.DT.users);
     }
   };
 
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+    // await fetchUsers(+event.selected + 1);
+    console.log(">>>> check data click: ", event);
+  };
+
   return (
-<div className="container">
+    <div className="container">
       <div className="manage-users-container">
         <div className="user-header">
           <div className="title-list">
@@ -39,44 +49,62 @@ const Users = (props) => {
                 <th scope="col">Email</th>
                 <th scope="col">Username</th>
                 <th scope="col">Group</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
-              {listUsers && listUsers.length > 0 ? 
-              <>
-              {listUsers.map((item, index) => {
-                  return (
-                    <tr key={`row-${index}`}>
-                      <td>
-                          {index + 1}
-                      </td>
-                      <td>{item.id}</td>
-                      <td>{item.email}</td>
-                      <td>{item.username}</td>
-                      <td>{item.Group ? item.Group.name : ''}</td>
-                    </tr>
-                  )
-              })}
-              </>
-              : 
-              <><span>Not found users...</span></>
-            }
+              {listUsers && listUsers.length > 0 ? (
+                <>
+                  {listUsers.map((item, index) => {
+                    return (
+                      <tr key={`row-${index}`}>
+                        <td>{index + 1}</td>
+                        <td>{item.id}</td>
+                        <td>{item.email}</td>
+                        <td>{item.username}</td>
+                        <td>{item.Group ? item.Group.name : ""}</td>
+                        <td>
+                          <button className="btn btn-warning mr-3">Edit</button>
+                          <button className="btn btn-danger">Delete</button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  <span>Not found users...</span>
+                </>
+              )}
             </tbody>
           </table>
         </div>
-        <div className="user-footer">
-          <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-  </nav>
-        </div>
-      </div> 
-</div>
+        {totalPages > 0 && (
+          <div className="user-footer">
+            <ReactPaginate
+              nextLabel="next >"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={4}
+              pageCount={totalPages}
+              previousLabel="< previous"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
