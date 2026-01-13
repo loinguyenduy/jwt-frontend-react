@@ -27,10 +27,11 @@ const Users = (props) => {
 
   const fetchUsers = async () => {
     let res = await fetchAllUser(currentPage, currentLimit);
+    console.log(">>> check res: ", res);
 
-    if (res && res.data && res.data.EC === 0) {
-      setTotalPages(res.data.DT.totalPages);
-      setListUsers(res.data.DT.users);
+    if (res && res.EC === 0) {
+      setTotalPages(res.DT.totalPages);
+      setListUsers(res.DT.users);
       // console.log("check data: ", res);
     }
   };
@@ -54,12 +55,12 @@ const Users = (props) => {
   const confirmDeleteUser = async () => {
     let response = await deleteUser(dataModal);
     console.log(">>> check user: ", response);
-    if (response && response.data.EC === 0) {
-      toast.success(response.data.EM);
+    if (response && response.EC === 0) {
+      toast.success(response.EM);
       await fetchUsers();
       setIsShowModalDelete(false);
     } else {
-      toast.error(response.data.EM);
+      toast.error(response.EM);
     }
   };
 
@@ -76,8 +77,8 @@ const Users = (props) => {
   };
 
   const handleRefresh = async () => {
-    await fetchUsers()
-  }
+    await fetchUsers();
+  };
   return (
     <>
       <div className="container">
@@ -87,8 +88,9 @@ const Users = (props) => {
               <h3>Manage Users</h3>
             </div>
             <div className="action my-3">
-              <button className="btn btn-success refresh"
-              onClick={() => handleRefresh()}
+              <button
+                className="btn btn-success refresh"
+                onClick={() => handleRefresh()}
               >
                 <i class="fa fa-refresh"> Refresh</i>
               </button>
@@ -98,7 +100,8 @@ const Users = (props) => {
                   setIsShowModalUser(true);
                   setActionModalUser("CREATE");
                 }}
-              ><i className="fa fa-plus-circle"> Add new user </i> 
+              >
+                <i className="fa fa-plus-circle"> Add new user </i>
               </button>
             </div>
           </div>
@@ -133,13 +136,13 @@ const Users = (props) => {
                               className="btn btn-warning mx-3"
                               onClick={() => handleEditUser(item)}
                             >
-                            <i className="fa fa-pencil"> Edit</i>
+                              <i className="fa fa-pencil"> Edit</i>
                             </button>
                             <button
                               className="btn btn-danger"
                               onClick={() => handleDeleteUser(item)}
                             >
-                            <i className="fa fa-trash-o"> Delete</i>  
+                              <i className="fa fa-trash-o"> Delete</i>
                             </button>
                           </td>
                         </tr>
