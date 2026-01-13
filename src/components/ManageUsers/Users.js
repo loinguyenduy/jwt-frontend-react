@@ -74,24 +74,31 @@ const Users = (props) => {
     setDataModalUser(user);
     setIsShowModalUser(true);
   };
+
+  const handleRefresh = async () => {
+    await fetchUsers()
+  }
   return (
     <>
       <div className="container">
         <div className="manage-users-container">
           <div className="user-header">
-            <div className="title-list">
-              <h3>Table Users</h3>
+            <div className="title-list mt-3">
+              <h3>Manage Users</h3>
             </div>
-            <div className="actions">
-              <button className="btn btn-success">Refresh</button>
+            <div className="action my-3">
+              <button className="btn btn-success refresh"
+              onClick={() => handleRefresh()}
+              >
+                <i class="fa fa-refresh"> Refresh</i>
+              </button>
               <button
                 className="btn btn-primary"
                 onClick={() => {
                   setIsShowModalUser(true);
                   setActionModalUser("CREATE");
                 }}
-              >
-                Add new user
+              ><i className="fa fa-plus-circle"> Add new user </i> 
               </button>
             </div>
           </div>
@@ -126,13 +133,13 @@ const Users = (props) => {
                               className="btn btn-warning mx-3"
                               onClick={() => handleEditUser(item)}
                             >
-                              Edit
+                            <i className="fa fa-pencil"> Edit</i>
                             </button>
                             <button
                               className="btn btn-danger"
                               onClick={() => handleDeleteUser(item)}
                             >
-                              Delete
+                            <i className="fa fa-trash-o"> Delete</i>  
                             </button>
                           </td>
                         </tr>
